@@ -2,12 +2,11 @@ package hello.servlet.web.frontcontroller.v5;
 
 import hello.servlet.web.frontcontroller.ModelView;
 import hello.servlet.web.frontcontroller.MyView;
-import hello.servlet.web.frontcontroller.v3.ControllerV3;
 import hello.servlet.web.frontcontroller.v3.controller.MemberFormControllerV3;
 import hello.servlet.web.frontcontroller.v3.controller.MemberListControllerV3;
 import hello.servlet.web.frontcontroller.v3.controller.MemberSaveControllerV3;
-import hello.servlet.web.frontcontroller.v4.ControllerV4;
 import hello.servlet.web.frontcontroller.v5.adapter.ControllerV3HandlerAdapter;
+import hello.servlet.web.frontcontroller.v5.adapter.ControllerV4HandlerAdapter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,8 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 @WebServlet(name = "frontControllerServletV5", urlPatterns = "/front-controller/v5/*")
-
-
 public class FrontControllerServletV5 extends HttpServlet {
 
     private final Map<String, Object> handlerMappingMap = new HashMap<>();  // 아무 컨트롤러나 다 들어갈 수 있어야 한다.
@@ -39,10 +36,17 @@ public class FrontControllerServletV5 extends HttpServlet {
         handlerMappingMap.put("/front-controller/v5/v3/members/new-form", new MemberFormControllerV3());
         handlerMappingMap.put("/front-controller/v5/v3/members/save", new MemberSaveControllerV3());
         handlerMappingMap.put("/front-controller/v5/v3/members", new MemberListControllerV3());
+
+        // V4
+        handlerMappingMap.put("/front-controller/v5/v4/members/new-form", new MemberFormControllerV3());
+        handlerMappingMap.put("/front-controller/v5/v4/members/save", new MemberSaveControllerV3());
+        handlerMappingMap.put("/front-controller/v5/v4/members", new MemberListControllerV3());
     }
 
     private void initHandlerAdapters() {
+
         handlerAdapters.add(new ControllerV3HandlerAdapter());
+        handlerAdapters.add(new ControllerV4HandlerAdapter());
     }
 
     @Override
@@ -53,7 +57,8 @@ public class FrontControllerServletV5 extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-        // 2. 핸들러 어댑터 찾아오기
+        // 2. 핸들러 매핑 정보를 찾아온다.
+        // ControllerV4가 호출된다.
         MyHandlerAdapter adapter = getHandlerAdapter(handler);
 
         // 3. 핸들 호출하며 내부적으로 컨트롤러 호출하기
