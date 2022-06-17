@@ -1,5 +1,6 @@
 package hello.servlet.web.frontcontroller.v5.adapter;
 
+import hello.servlet.domain.member.Member;
 import hello.servlet.web.frontcontroller.ModelView;
 import hello.servlet.web.frontcontroller.v4.ControllerV4;
 import hello.servlet.web.frontcontroller.v5.MyHandlerAdapter;
@@ -25,6 +26,7 @@ public class ControllerV4HandlerAdapter implements MyHandlerAdapter {
         HashMap<String, Object> model = new HashMap<>();
 
         String viewName = controller.process(paramMap, model);
+
         // 기존에는 ModelView였는데 이제는 String을 반환해야 한다...
         ModelView mv = new ModelView(viewName);
         mv.setModel(model);
